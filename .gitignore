@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+.env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Vector store / embeddings
+vector_store/
+
+# Audit logs
+/audit/
+
+# OS
+.DS_Store
+
+# Packaging
+build/
+dist/
+*.egg-info/
+
+# Logs
+*.log

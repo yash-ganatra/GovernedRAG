@@ -1,0 +1,369 @@
+# Housing Benefit — Structured Policy Extraction
+# Source: GOV.UK official documentation
+# Extraction Date: 2026-02-23
+# Purpose: Knowledge graph construction for GovernedRAG system
+# All rules extracted strictly from official GOV.UK sources
+
+# ============================================================
+# DOCUMENT PROVENANCE & FRESHNESS TRACKING
+# ============================================================
+
+document_sources:
+  - id: govuk_overview
+    document_name: "Housing Benefit Overview"
+    source: "gov.uk"
+    url: "https://www.gov.uk/housing-benefit"
+    section: "Overview, Who Can Claim, When You Cannot Claim, Changes in Circumstances"
+    last_accessed: "2026-02-23"
+    content_type: "official_government_policy"
+    licence: "Open Government Licence v3.0"
+
+  - id: govuk_eligibility
+    document_name: "Housing Benefit Eligibility"
+    source: "gov.uk"
+    url: "https://www.gov.uk/housing-benefit/eligibility"
+    section: "Eligibility, Savings Rules, Income Rules, Pensioner Exceptions"
+    last_accessed: "2026-02-23"
+    content_type: "official_government_policy"
+    licence: "Open Government Licence v3.0"
+
+  - id: govuk_what_youll_get
+    document_name: "Housing Benefit - What You'll Get"
+    source: "gov.uk"
+    url: "https://www.gov.uk/housing-benefit/what-youll-get"
+    section: "Payment Amounts, Council Housing, Private Rent, Benefit Cap"
+    last_accessed: "2026-02-23"
+    content_type: "official_government_policy"
+    licence: "Open Government Licence v3.0"
+
+  - id: govuk_uc_transition
+    document_name: "Housing Costs and Universal Credit"
+    source: "gov.uk"
+    url: "https://www.gov.uk/housing-and-universal-credit"
+    section: "UC Housing Element, Supported Housing, Transition"
+    last_accessed: "2026-02-23"
+    content_type: "official_government_policy"
+    licence: "Open Government Licence v3.0"
+
+  - id: govuk_changes
+    document_name: "Housing Benefit - Report a Change of Circumstances"
+    source: "gov.uk"
+    url: "https://www.gov.uk/housing-benefit/report-a-change-of-circumstances"
+    section: "Reportable Changes, Overpayments"
+    last_accessed: "2026-02-23"
+    content_type: "official_government_policy"
+    licence: "Open Government Licence v3.0"
+
+  - id: camden_council
+    document_name: "Camden Council Housing Benefit"
+    source: "camden.gov.uk"
+    url: "https://www.camden.gov.uk/housing-benefit"
+    section: "Who Can Claim, How to Claim, How You're Paid, Backdating"
+    last_accessed: "2026-02-23"
+    content_type: "local_authority_implementation"
+    licence: "© The London Borough of Camden"
+
+# ============================================================
+# BENEFIT SCHEME — CORE DEFINITION
+# ============================================================
+
+benefit_scheme:
+  name: "Housing Benefit"
+  type: "means-tested benefit"
+  purpose: "Help with rent payments for unemployed, low income or benefit claimants"
+  administered_by: "Local Council"
+  national_oversight: "Department for Work and Pensions (DWP)"
+  status: "being_replaced_by_universal_credit"
+  legislation: "Housing Benefit Regulations 2006 (SI 2006/213)"
+
+# ============================================================
+# ELIGIBILITY RULES
+# ============================================================
+
+eligibility:
+  # --- New claims restriction ---
+  new_claims_restricted_to:
+    - condition: "reached_state_pension_age"
+      details: "Single claimants who have reached State Pension age"
+    - condition: "pension_age_couple"
+      details: "Both partners have reached State Pension age"
+    - condition: "pension_credit_pre_may_2019"
+      details: "One partner reached State Pension age and started claiming Pension Credit as a couple before 15 May 2019"
+    - condition: "supported_sheltered_temporary_housing"
+      details: "Living in supported, sheltered or temporary housing regardless of age"
+
+  # --- Savings rules ---
+  savings_limit:
+    maximum: 16000
+    currency: "GBP"
+    rule: "Applicants with savings over £16,000 are generally not eligible for Housing Benefit."
+    source_document: govuk_eligibility
+    tariff_income_threshold: 6000
+    tariff_income_rule: "For every £250 (or part of £250) of savings above £6,000, £1 per week is treated as income."
+    pensioner_exception: "The £16,000 savings cap does not apply if the claimant receives Guarantee Credit of Pension Credit."
+
+  # --- Income considered ---
+  income_considered:
+    - type: "employment_income"
+      description: "Earnings from employment"
+    - type: "pension_income"
+      description: "State pension and personal/workplace pensions"
+    - type: "other_benefits"
+      description: "Other benefits received by claimant or household members"
+    - type: "savings_tariff_income"
+      description: "Deemed income from savings between £6,000 and £16,000"
+
+  # --- Residency requirement ---
+  residency_requirement: true
+  residency_details: "Must be habitually resident in the UK"
+
+  # --- Housing type requirement ---
+  housing_types_eligible:
+    - "council_housing"
+    - "housing_association"
+    - "private_rented"
+    - "supported_housing"
+    - "sheltered_housing"
+    - "temporary_accommodation"
+    - "domestic_violence_refuge"
+
+# ============================================================
+# EXCLUSION RULES (WHEN YOU CANNOT CLAIM)
+# ============================================================
+
+exclusions:
+  - rule: "savings_over_16000"
+    description: "Savings over £16,000 (unless receiving Guarantee Credit of Pension Credit)"
+    threshold: 16000
+    exception: "Guarantee Credit of Pension Credit"
+
+  - rule: "mortgage_payer"
+    description: "Paying a mortgage on own home"
+    alternative: "Support for Mortgage Interest (SMI)"
+
+  - rule: "close_relative_home"
+    description: "Living in the home of a close relative"
+
+  - rule: "already_claiming_universal_credit"
+    description: "Already claiming Universal Credit"
+    exception: "In temporary or supported housing"
+
+  - rule: "partner_already_claiming"
+    description: "Partner already claiming Housing Benefit"
+
+  - rule: "full_time_student"
+    description: "Full-time students are generally excluded"
+
+  - rule: "eea_jobseeker"
+    description: "Residing in the UK as an EEA jobseeker"
+
+  - rule: "asylum_seeker"
+    description: "Asylum seeker or sponsored to be in the UK"
+
+  - rule: "immigration_control"
+    description: "Subject to immigration control with no recourse to public funds"
+
+  - rule: "crown_tenant"
+    description: "Crown Tenants are not eligible"
+
+  - rule: "mixed_age_couple_post_may_2019"
+    description: "Reached State Pension age but live-in partner has not"
+    exception: "Existing claim as a couple before 15 May 2019"
+
+# ============================================================
+# WHAT HB DOES NOT COVER
+# ============================================================
+
+not_covered:
+  - "utility_bills"
+  - "council_tax"
+  - "mortgage_payments"
+  - "heating_costs"
+  - "water_costs"
+
+# ============================================================
+# DOCUMENTATION REQUIRED
+# ============================================================
+
+documentation_required:
+  - type: "proof_of_identity"
+    examples: ["passport", "birth_certificate"]
+  - type: "national_insurance_number"
+    examples: ["NI number letter", "payslip with NI"]
+  - type: "proof_of_residence"
+    examples: ["proof of who is living at the address"]
+  - type: "proof_of_income"
+    examples: ["payslips", "benefit letters", "pension statements"]
+  - type: "proof_of_savings"
+    examples: ["bank statements", "investment records"]
+  - type: "tenancy_agreement"
+    examples: ["signed tenancy agreement", "rent book"]
+
+# ============================================================
+# PAYMENT CALCULATION RULES
+# ============================================================
+
+payment_rules:
+  council_and_social_housing:
+    based_on:
+      - "eligible_rent"
+      - "spare_bedrooms"
+      - "household_income"
+      - "personal_circumstances"
+    spare_bedroom_reduction:
+      one_spare: "14% reduction of eligible rent"
+      two_or_more_spare: "25% reduction of eligible rent"
+    eligible_rent_definition: "Actual rent plus eligible service charges, excluding heating and water costs"
+
+  private_rent:
+    based_on:
+      - "local_housing_allowance_rate"
+      - "actual_rent"
+      - "household_income"
+    lha_rate_factors:
+      - "location"
+      - "household_size"
+    rule: "Eligible rent is the lower of LHA rate or actual rent"
+
+  benefit_cap:
+    applies_to: "Most people aged 16+ who have not reached State Pension age"
+    effect: "Housing Benefit reduced so total benefits do not exceed cap level"
+
+# ============================================================
+# UNIVERSAL CREDIT TRANSITION
+# ============================================================
+
+transition:
+  replaced_by: "Universal Credit"
+  status: "ongoing_managed_migration"
+  new_claims_for_working_age: "must_claim_universal_credit"
+  exceptions_for_housing_benefit:
+    - "supported_housing_with_care_support_supervision"
+    - "temporary_accommodation_arranged_by_council"
+    - "domestic_violence_refuge"
+  mixed_claims_allowed: true
+  mixed_claims_detail: "Claimants in supported housing can claim HB for housing costs AND UC for living costs"
+  migration_notice: "DWP sends Migration Notice letters to existing HB claimants requiring move to UC"
+  policy_freshness_warning: "Transition is ongoing — policy details may change"
+
+# ============================================================
+# CHANGE OF CIRCUMSTANCES RULES
+# ============================================================
+
+reportable_changes:
+  must_report:
+    - "starting_or_stopping_work"
+    - "changes_to_benefits_received"
+    - "pension_changes"
+    - "savings_investment_property_changes"
+    - "income_changes"
+    - "moving_house"
+    - "rent_changes"
+    - "going_abroad"
+    - "hospital_care_home_admission"
+    - "household_composition_changes"
+    - "having_a_baby"
+    - "death_of_partner_or_household_member"
+    - "child_turning_18"
+    - "immigration_status_changes"
+  failure_consequences:
+    - "claim_stopped"
+    - "claim_reduced"
+    - "overpayment_recovery"
+  extended_payment:
+    trigger: "returning_to_work_or_increasing_hours"
+    duration: "4 weeks"
+    name: "Extended Payment of Housing Benefit"
+
+# ============================================================
+# LOCAL AUTHORITY VARIATION — CAMDEN COUNCIL
+# ============================================================
+
+local_authority_implementation:
+  council_name: "London Borough of Camden"
+  url: "https://www.camden.gov.uk/housing-benefit"
+  last_accessed: "2026-02-23"
+
+  local_rules:
+    evidence_deadline:
+      period: "1 month from claim submission"
+      enforcement: "strict — failure may result in denial of entitlement"
+
+    payment_start_date: "First Monday after claim submission"
+
+    backdating:
+      pension_age: "Up to 3 months, no reason required"
+      working_age: "Up to 1 month, good reason required"
+
+    landlord_direct_payment:
+      threshold: "8 weeks rent arrears"
+      payment_frequency: "Every 4 weeks in arrears"
+
+    discretionary_housing_payments:
+      available: true
+      duration: "short-term"
+      application: "After HB entitlement confirmed"
+
+    additional_services:
+      - "Better Off Calculator for benefit estimates"
+      - "Citizens Advice Camden partnership"
+      - "Online application via Open Portal"
+
+    overnight_carer_provision:
+      available: true
+      condition: "Qualifying disability benefit recipient"
+      effect: "Additional bedroom included in HB calculation"
+
+  consistency_notes:
+    - "Camden aligns with GOV.UK national eligibility rules"
+    - "Local variation: strict 1-month evidence deadline"
+    - "Local variation: 8-week arrears threshold for landlord direct payment"
+    - "Local variation: backdating periods defined (3 months pension / 1 month working age)"
+
+# ============================================================
+# GOVERNANCE & COMPLIANCE METADATA
+# ============================================================
+
+governance:
+  grounding_verification:
+    all_rules_sourced_from: "Official GOV.UK documentation and Camden Council website"
+    no_synthetic_data: true
+    extraction_method: "Manual structured extraction from authoritative web pages"
+
+  audit_trail:
+    extraction_date: "2026-02-23"
+    extracted_by: "GovernedRAG automated pipeline"
+    source_urls:
+      - "https://www.gov.uk/housing-benefit"
+      - "https://www.gov.uk/housing-benefit/eligibility"
+      - "https://www.gov.uk/housing-benefit/what-youll-get"
+      - "https://www.gov.uk/housing-benefit/report-a-change-of-circumstances"
+      - "https://www.gov.uk/housing-and-universal-credit"
+      - "https://www.camden.gov.uk/housing-benefit"
+
+  policy_freshness:
+    last_verified: "2026-02-23"
+    freshness_check_recommended: "monthly"
+    staleness_threshold_days: 90
+    note: "Housing Benefit policy is subject to ongoing changes due to Universal Credit migration"
+
+  contradiction_detection_rules:
+    - rule: "savings_cap_consistency"
+      check: "All documents must agree on £16,000 savings threshold"
+      sources: ["govuk_eligibility", "govuk_overview"]
+
+    - rule: "pension_credit_exception_consistency"
+      check: "Guarantee Credit exception must be consistently stated"
+      sources: ["govuk_eligibility", "govuk_overview"]
+
+    - rule: "uc_transition_consistency"
+      check: "New claims restriction must align across national and local sources"
+      sources: ["govuk_overview", "govuk_uc_transition", "camden_council"]
+
+    - rule: "supported_housing_definition_consistency"
+      check: "Definition of supported/sheltered/temporary housing must be consistent"
+      sources: ["govuk_overview", "govuk_eligibility", "govuk_uc_transition", "camden_council"]
+
+    - rule: "local_national_alignment"
+      check: "Camden eligibility rules must not contradict GOV.UK national rules"
+      sources: ["govuk_overview", "camden_council"]

@@ -16,10 +16,12 @@ import json
 import chromadb
 from chromadb.config import Settings
 from sentence_transformers import SentenceTransformer
-from typing import Any
+from typing import Any, Optional
 
 # ── Configuration ────────────────────────────────────────────────────────
-EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
+# Default to BAAI/bge-m3 to reuse cached model across projects.
+# Override via EMBEDDING_MODEL_NAME env var if needed.
+EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME", "BAAI/bge-m3")
 CHROMA_PERSIST_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
     "vector_store",
@@ -38,7 +40,7 @@ RETRIEVAL_COUNTS_PATH = os.path.join(
 class VectorStoreManager:
     """Manages ChromaDB collections for the GovernedRAG pipeline."""
 
-    def __init__(self, persist_dir: str | None = None):
+    def __init__(self, persist_dir: Optional[str] = None):
         self.persist_dir = persist_dir or CHROMA_PERSIST_DIR
         os.makedirs(self.persist_dir, exist_ok=True)
 
@@ -49,7 +51,10 @@ class VectorStoreManager:
 
         # Load embedding model once
         print(f"[VectorStore] Loading embedding model: {EMBEDDING_MODEL_NAME}")
-        self.model = SentenceTransformer(EMBEDDING_MODEL_NAME)
+        self.model = SentenceTransformer(
+            EMBEDDING_MODEL_NAME,
+            trust_remote_code=True,
+        )
         self.embedding_model_name = EMBEDDING_MODEL_NAME
 
         # Get or create both collections
@@ -132,7 +137,7 @@ class VectorStoreManager:
         query_text: str,
         collection_name: str = COLLECTION_HOUSING,
         n_results: int = 5,
-        where_filter: dict | None = None,
+        where_filter: Optional[dict] = None,
     ) -> dict[str, Any]:
         """
         Query a collection. Returns dict with keys:

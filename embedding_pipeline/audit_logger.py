@@ -16,7 +16,7 @@ Fields:
 import os
 import sqlite3
 from datetime import datetime, timezone
-from typing import Any
+from typing import Any, Optional
 
 
 DEFAULT_DB_PATH = os.path.join(
@@ -29,7 +29,7 @@ DEFAULT_DB_PATH = os.path.join(
 class AuditLogger:
     """SQLite audit logger for embedding pipeline events."""
 
-    def __init__(self, db_path: str | None = None):
+    def __init__(self, db_path: Optional[str] = None):
         self.db_path = db_path or DEFAULT_DB_PATH
         os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
         self._init_db()

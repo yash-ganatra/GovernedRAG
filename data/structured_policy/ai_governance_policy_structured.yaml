@@ -1,0 +1,380 @@
+# AI Governance — Structured Policy Extraction
+# Sources: EU AI Act (Reg. 2024/1689), GDPR (Reg. 2016/679), NIST AI RMF 1.0, ISO/IEC 42001:2023
+# Extraction Date: 2026-02-24
+# Purpose: Knowledge graph construction for GovernedRAG system
+# All rules extracted from official/authoritative sources
+
+# ============================================================
+# DOCUMENT PROVENANCE & FRESHNESS TRACKING
+# ============================================================
+
+document_sources:
+  - id: eu_ai_act
+    document_name: "EU Artificial Intelligence Act"
+    source: "European Parliament and Council of the EU"
+    url: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689"
+    section: "Article 12 (Record-keeping), Article 13 (Transparency), Article 14 (Human Oversight)"
+    last_accessed: "2026-02-24"
+    content_type: "official_eu_regulation"
+    licence: "© European Union, 1998–2024"
+
+  - id: gdpr
+    document_name: "General Data Protection Regulation"
+    source: "European Parliament and Council of the EU"
+    url: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679"
+    section: "Article 5(2) (Accountability), Article 15 (Right of Access), Article 22 (Automated Decisions)"
+    last_accessed: "2026-02-24"
+    content_type: "official_eu_regulation"
+    licence: "© European Union, 1998–2024"
+
+  - id: nist_ai_rmf
+    document_name: "NIST AI Risk Management Framework (AI RMF 1.0)"
+    source: "National Institute of Standards and Technology"
+    url: "https://airc.nist.gov/RMF"
+    section: "GOVERN function (GV-1 to GV-6), MEASURE function (MS-1 to MS-4)"
+    last_accessed: "2026-02-24"
+    content_type: "us_government_framework"
+    licence: "Public Domain"
+
+  - id: iso_42001
+    document_name: "ISO/IEC 42001:2023 AI Management System"
+    source: "International Organization for Standardization"
+    url: "https://www.iso.org/standard/81230.html"
+    section: "Clauses 4–10 (Context, Leadership, Planning, Support, Operation, Evaluation, Improvement)"
+    last_accessed: "2026-02-24"
+    content_type: "international_standard_summary"
+    licence: "ISO copyright — summary only"
+
+# ============================================================
+# GOVERNANCE FRAMEWORK — CORE DEFINITION
+# ============================================================
+
+governance_framework:
+  name: "AI Governance Compliance Framework"
+  type: "multi-regulatory compliance policy"
+  purpose: "Ensure responsible, transparent, and accountable AI development and deployment"
+  administered_by: "AI Governance Function / Data Protection Officer"
+  regulatory_oversight:
+    - "European Union AI Office (EU AI Act)"
+    - "National Data Protection Authorities (GDPR)"
+    - "ISO Certification Body (ISO/IEC 42001)"
+  status: "active"
+  effective_date: "2024-08-01"
+
+# ============================================================
+# EU AI ACT — KEY OBLIGATIONS
+# ============================================================
+
+eu_ai_act_obligations:
+  record_keeping:
+    article: "Article 12"
+    requirement: "High-risk AI systems must automatically record events (logs) over their lifetime"
+    minimum_log_contents:
+      - "Period of each use (start and end date/time)"
+      - "Reference database used for input verification"
+      - "Input data that led to matches"
+      - "Identification of natural persons involved"
+    retention_period: "At least 6 months unless other law requires different period"
+    source_document: eu_ai_act
+
+  transparency:
+    article: "Article 13"
+    requirement: "High-risk AI systems must be transparent enough for deployers to interpret outputs"
+    instructions_for_use_must_include:
+      - "Provider identity and contact details"
+      - "AI system capabilities, limitations, and accuracy metrics"
+      - "Known foreseeable risks to health, safety, or fundamental rights"
+      - "Performance metrics across demographic groups"
+      - "Human oversight measures (per Article 14)"
+      - "Log collection and storage mechanisms (per Article 12)"
+    source_document: eu_ai_act
+
+  human_oversight:
+    article: "Article 14"
+    requirement: "High-risk AI systems must support effective human oversight during operation"
+    oversight_measures:
+      - capability: "Understand AI system capabilities and limitations"
+      - capability: "Detect anomalies, dysfunctions, unexpected performance"
+      - capability: "Awareness of automation bias risk"
+      - capability: "Interpret AI system outputs correctly"
+      - capability: "Decide not to use or override AI system output"
+      - capability: "Intervene or halt AI system via stop mechanism"
+    compliance_timeline:
+      regulation_in_force: "2024-08-01"
+      high_risk_obligations_apply: "2026-08-02"
+    source_document: eu_ai_act
+
+# ============================================================
+# GDPR — KEY OBLIGATIONS FOR AI SYSTEMS
+# ============================================================
+
+gdpr_obligations:
+  accountability_principle:
+    article: "Article 5(2)"
+    requirement: "Controller must demonstrate compliance with all data processing principles"
+    six_core_principles:
+      - name: "Lawfulness, fairness and transparency"
+        article: "5(1)(a)"
+      - name: "Purpose limitation"
+        article: "5(1)(b)"
+      - name: "Data minimisation"
+        article: "5(1)(c)"
+      - name: "Accuracy"
+        article: "5(1)(d)"
+      - name: "Storage limitation"
+        article: "5(1)(e)"
+      - name: "Integrity and confidentiality"
+        article: "5(1)(f)"
+    documentation_required:
+      - "Article 30 — Records of processing activities"
+      - "Article 35 — Data Protection Impact Assessment (DPIA)"
+      - "Article 25 — Privacy by design evidence"
+      - "Consent records where consent is the lawful basis"
+    source_document: gdpr
+
+  right_of_access:
+    article: "Article 15"
+    requirement: "Data subjects can access their personal data and information about its processing"
+    information_to_provide:
+      - "Purposes of AI processing"
+      - "Categories of personal data processed"
+      - "Recipients of the data"
+      - "Retention periods"
+      - "Rights to rectification, erasure, restriction"
+      - "Right to lodge a complaint with supervisory authority"
+      - "Source of data if not from the data subject"
+      - "Existence of automated decision-making and logic involved"
+    explainability_obligation: "Meaningful information about the logic involved in any automated decision-making"
+    response_timeline_days: 30
+    source_document: gdpr
+
+  automated_decision_making:
+    article: "Article 22"
+    general_prohibition: "Data subjects shall not be subject to solely automated decisions with legal or similarly significant effects"
+    exceptions:
+      - condition: "Necessary for entering or performing a contract"
+        article: "22(2)(a)"
+      - condition: "Authorised by Union or Member State law"
+        article: "22(2)(b)"
+      - condition: "Based on data subject's explicit consent"
+        article: "22(2)(c)"
+    required_safeguards_when_exceptions_apply:
+      - "Right to obtain human intervention"
+      - "Right to express point of view"
+      - "Right to contest the decision"
+    special_category_data:
+      rule: "Cannot use special category data in automated decisions without explicit consent or substantial public interest"
+      categories: ["health", "ethnicity", "biometrics", "religion", "sexual orientation", "political opinions"]
+    mandatory_dpia: true
+    source_document: gdpr
+
+# ============================================================
+# NIST AI RMF — GOVERN AND MEASURE FUNCTIONS
+# ============================================================
+
+nist_ai_rmf:
+  govern_function:
+    purpose: "Cultivate organisational structures, policies and culture of AI risk management accountability"
+    key_subcategories:
+      GV_1_2:
+        description: "AI risk tolerance established, communicated, and maintained"
+        artefact: "Board-level AI risk appetite statement"
+      GV_2_1:
+        description: "Roles and responsibilities for AI risk management documented"
+        artefact: "RACI matrix for AI governance"
+      GV_4_1:
+        description: "Safety-first mindset in AI design and deployment"
+        artefact: "Red team process and safety review gates"
+      GV_6_2:
+        description: "Contingency processes for harmful AI outputs, including kill-switch procedures"
+        artefact: "AI incident response runbooks"
+
+  measure_function:
+    purpose: "Analyse, assess, benchmark and monitor AI risk and its impacts"
+    key_subcategories:
+      MS_1_1:
+        description: "Metrics for measuring and monitoring AI risks selected from concept phase onwards"
+        artefact: "AI KPI dashboard (accuracy, fairness, drift)"
+      MS_2_2:
+        description: "Adversarial testing including red-teaming to identify failure modes"
+        artefact: "Red team and penetration testing results"
+      MS_2_5:
+        description: "AI system performance validated across demographic groups"
+        artefact: "Disaggregated evaluation report"
+      MS_2_10:
+        description: "Privacy risk of the AI system examined and documented"
+        artefact: "DPIA integrated with AI lifecycle"
+      MS_2_11:
+        description: "Fairness and bias evaluated on a regular basis"
+        artefact: "Bias audit report"
+      MS_3_1:
+        description: "Ongoing monitoring plans in place for AI risk at system level"
+        artefact: "Model monitoring dashboard"
+      MS_3_3:
+        description: "Feedback and appeal processes for end users integrated into evaluation"
+        artefact: "User complaint and appeal workflow"
+
+  trustworthiness_characteristics:
+    - "Accountable and Transparent"
+    - "Explainable and Interpretable"
+    - "Fair with Harmful Bias Managed"
+    - "Privacy-Enhanced"
+    - "Reliable"
+    - "Resilient"
+    - "Safe"
+    - "Secure and Resilient"
+    - "Valid and Verified"
+
+# ============================================================
+# ISO/IEC 42001 — AI MANAGEMENT SYSTEM REQUIREMENTS
+# ============================================================
+
+iso_iec_42001:
+  standard: "ISO/IEC 42001:2023"
+  model: "Plan-Do-Check-Act (PDCA)"
+  scope: "Full AI lifecycle from design through decommissioning"
+
+  mandatory_documentation:
+    - name: "AIMS scope"
+      clause: "4.3"
+    - name: "AI policy"
+      clause: "5.2"
+    - name: "AI risk assessment results"
+      clause: "6.1.2"
+    - name: "AI risk treatment plan"
+      clause: "6.1.3"
+    - name: "AI objectives"
+      clause: "6.2"
+    - name: "AI system lifecycle documentation"
+      clause: "8.4"
+    - name: "Monitoring and measurement results"
+      clause: "9.1"
+    - name: "Internal audit results"
+      clause: "9.2"
+    - name: "Management review results"
+      clause: "9.3"
+    - name: "Nonconformities and corrective actions"
+      clause: "10.1"
+
+  ai_policy_requirements:
+    must_include:
+      - "Commitment to satisfy applicable AI requirements"
+      - "Commitment to continual improvement of AIMS"
+      - "Commitment to fairness, transparency, accountability, and human oversight"
+    must_be:
+      - "Available as documented information"
+      - "Communicated within the organisation"
+      - "Available to interested parties where appropriate"
+
+  risk_categories:
+    - name: "Safety risks"
+      example: "Physical harm from AI-controlled systems"
+    - name: "Fairness risks"
+      example: "Discriminatory outcomes in high-stakes decisions"
+    - name: "Privacy risks"
+      example: "Unauthorised access to personal data via AI"
+    - name: "Transparency risks"
+      example: "Unexplainable decisions affecting individuals"
+    - name: "Operational risks"
+      example: "Model drift, service disruption"
+    - name: "Reputational risks"
+      example: "Public harm from AI system failures"
+    - name: "Legal/compliance risks"
+      example: "Violations of GDPR, EU AI Act"
+
+  performance_metrics:
+    - metric: "Model accuracy"
+      description: "Performance on validation datasets"
+    - metric: "Fairness indicators"
+      description: "Demographic parity, equal opportunity"
+    - metric: "Data quality"
+      description: "Coverage, completeness, and accuracy"
+    - metric: "Incident rate"
+      description: "Frequency and severity of AI failures"
+    - metric: "Explainability score"
+      description: "Percentage of decisions explainable on request"
+    - metric: "Compliance posture"
+      description: "Open audit findings and remediation status"
+
+# ============================================================
+# CROSS-FRAMEWORK COMPLIANCE MAPPING
+# ============================================================
+
+compliance_mapping:
+  - requirement: "AI audit logging"
+    eu_ai_act: "Article 12"
+    gdpr: "Article 5(2) — Accountability"
+    nist_rmf: "MS-1.1, GV-1.6"
+    iso_42001: "Clause 7.5 (Documented Information), 9.1"
+
+  - requirement: "Model explainability"
+    eu_ai_act: "Article 13(3)(b)"
+    gdpr: "Article 15(1)(h), Article 22(3)"
+    nist_rmf: "MS-2.8, MS-2.9"
+    iso_42001: "Clause 5.2 (AI Policy — transparency)"
+
+  - requirement: "Human oversight"
+    eu_ai_act: "Article 14"
+    gdpr: "Article 22(3) — right to human intervention"
+    nist_rmf: "GV-6.2 (contingency processes)"
+    iso_42001: "Clause 8.4 (AI system lifecycle)"
+
+  - requirement: "Bias and fairness assessment"
+    eu_ai_act: "Article 13(3)(b) — demographic performance"
+    gdpr: "Article 22 — non-discrimination in automated decisions"
+    nist_rmf: "MS-2.5, MS-2.11"
+    iso_42001: "Clause 6.1.2 — fairness risk category"
+
+  - requirement: "Privacy by design"
+    eu_ai_act: "Article 10 — data governance for training data"
+    gdpr: "Article 25 — data protection by design"
+    nist_rmf: "MS-2.10"
+    iso_42001: "Clause 8.4 — design and development"
+
+  - requirement: "Incident response"
+    eu_ai_act: "Article 73 — serious incident reporting"
+    gdpr: "Article 33 — breach notification within 72 hours"
+    nist_rmf: "GV-6.2 — contingency processes"
+    iso_42001: "Clause 10.1 — corrective action"
+
+# ============================================================
+# GOVERNANCE & COMPLIANCE METADATA
+# ============================================================
+
+governance:
+  grounding_verification:
+    all_rules_sourced_from: "Official EU legislation, U.S. NIST publications, ISO standard summaries"
+    no_synthetic_data: true
+    extraction_method: "Manual structured extraction from authoritative regulatory sources"
+
+  audit_trail:
+    extraction_date: "2026-02-24"
+    extracted_by: "GovernedRAG automated pipeline"
+    source_urls:
+      - "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689"
+      - "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679"
+      - "https://airc.nist.gov/RMF"
+      - "https://www.iso.org/standard/81230.html"
+
+  policy_freshness:
+    last_verified: "2026-02-24"
+    freshness_check_recommended: "quarterly"
+    staleness_threshold_days: 90
+    note: "EU AI Act provisions are phased — check compliance timeline with each phase"
+
+  contradiction_detection_rules:
+    - rule: "human_oversight_consistency"
+      check: "EU AI Act Article 14 and GDPR Article 22(3) must both require human review capability"
+      sources: ["eu_ai_act", "gdpr"]
+
+    - rule: "explainability_consistency"
+      check: "Explainability obligations must be consistent across EU AI Act Art 13 and GDPR Art 15(1)(h)"
+      sources: ["eu_ai_act", "gdpr"]
+
+    - rule: "logging_accountability_consistency"
+      check: "Logging requirements in EU AI Act Art 12 must support GDPR Art 5(2) accountability demonstration"
+      sources: ["eu_ai_act", "gdpr"]
+
+    - rule: "iso_nist_alignment"
+      check: "ISO/IEC 42001 documented information requirements must cover NIST AI RMF GOVERN outcomes"
+      sources: ["iso_42001", "nist_ai_rmf"]

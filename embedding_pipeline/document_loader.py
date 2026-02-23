@@ -1,7 +1,7 @@
 """
 Document Loader — Extracts documents with governance metadata.
 
-Loads .md files from data/housing_docs/ and .yaml from data/structured_policy/.
+Loads .md files from data/ai_governance_docs/ and .yaml from data/structured_policy/.
 Each document is enriched with provenance metadata for traceability.
 """
 
@@ -9,35 +9,35 @@ import os
 import re
 import yaml
 from datetime import datetime, timezone
-from typing import Any
+from typing import Any, Optional
 
 
 # ── Metadata map: filename → known provenance ───────────────────────────
 DOCUMENT_METADATA_MAP: dict[str, dict[str, str]] = {
-    "govuk_housing_benefit_overview.md": {
-        "source_name": "gov.uk",
-        "url": "https://www.gov.uk/housing-benefit",
-        "document_category": "national",
+    "eu_ai_act.md": {
+        "source_name": "European Parliament and Council of the EU",
+        "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689",
+        "document_category": "eu_regulation",
     },
-    "govuk_eligibility.md": {
-        "source_name": "gov.uk",
-        "url": "https://www.gov.uk/housing-benefit/eligibility",
-        "document_category": "national",
+    "gdpr.md": {
+        "source_name": "European Parliament and Council of the EU",
+        "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679",
+        "document_category": "eu_regulation",
     },
-    "govuk_universal_credit_transition.md": {
-        "source_name": "gov.uk",
-        "url": "https://www.gov.uk/housing-and-universal-credit",
-        "document_category": "national",
+    "nist_ai_rmf.md": {
+        "source_name": "National Institute of Standards and Technology",
+        "url": "https://airc.nist.gov/RMF",
+        "document_category": "us_framework",
     },
-    "camden_council_housing.md": {
-        "source_name": "camden_council",
-        "url": "https://www.camden.gov.uk/housing-benefit",
-        "document_category": "local",
+    "iso_iec_42001.md": {
+        "source_name": "International Organization for Standardization",
+        "url": "https://www.iso.org/standard/81230.html",
+        "document_category": "international_standard",
     },
 }
 
 
-def _extract_url_from_frontmatter(text: str) -> str | None:
+def _extract_url_from_frontmatter(text: str) -> Optional[str]:
     """Try to pull a URL from the markdown blockquote header."""
     match = re.search(r"\*\*URL:\*\*\s*(https?://\S+)", text)
     return match.group(1) if match else None
@@ -110,8 +110,8 @@ def load_yaml_policy(yaml_path: str) -> dict[str, Any]:
 
     return {
         "file_name": os.path.basename(yaml_path),
-        "source_name": "gov.uk",
-        "url": "https://www.gov.uk/housing-benefit",
+        "source_name": "ISO / EU / NIST",
+        "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689",
         "date_embedded": now,
         "document_version": "v1",
         "document_category": "structured_policy",

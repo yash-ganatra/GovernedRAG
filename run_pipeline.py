@@ -4,7 +4,7 @@ run_pipeline.py — GovernedRAG Embedding Pipeline
 =================================================
 
 Production-grade pipeline that:
-    1. Loads curated housing documents + structured YAML policy
+    1. Loads curated AI governance documents + structured YAML policy
     2. Chunks with section-aware overlapping strategy
     3. Embeds into ChromaDB (two collections)
     4. Attaches full governance metadata
@@ -13,7 +13,14 @@ Production-grade pipeline that:
     7. Runs a test retrieval query
 """
 
+# ── Fix macOS OpenBLAS / SciPy deadlock ──────────────────────────────────
+# Must be set BEFORE importing numpy, scipy, sklearn, or sentence_transformers.
+# Without this, scipy hangs at _propack._dpropack on macOS with LibreSSL.
 import os
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
+os.environ.setdefault("MKL_NUM_THREADS", "1")
+
 import sys
 import json
 
@@ -36,9 +43,9 @@ from embedding_pipeline.audit_logger import AuditLogger
 
 
 # ── Paths ────────────────────────────────────────────────────────────────
-HOUSING_DOCS_DIR = os.path.join(PROJECT_ROOT, "data", "housing_docs")
+AI_GOVERNANCE_DOCS_DIR = os.path.join(PROJECT_ROOT, "data", "ai_governance_docs")
 YAML_POLICY_PATH = os.path.join(
-    PROJECT_ROOT, "data", "structured_policy", "housing_policy_structured.yaml"
+    PROJECT_ROOT, "data", "structured_policy", "ai_governance_policy_structured.yaml"
 )
 
 
@@ -53,8 +60,8 @@ def main() -> None:
     audit = AuditLogger()
 
     # ── STEP 2: Load markdown documents ──────────────────────────────────
-    print("\n▶ Step 2 — Loading markdown housing documents ...")
-    md_docs = load_markdown_documents(HOUSING_DOCS_DIR)
+    print("\n▶ Step 2 — Loading markdown AI governance documents ...")
+    md_docs = load_markdown_documents(AI_GOVERNANCE_DOCS_DIR)
     print(f"  Loaded {len(md_docs)} markdown documents:")
     for d in md_docs:
         print(f"    • {d['file_name']}  ({d['document_category']})  sections={len(d['sections'])}")
@@ -75,7 +82,7 @@ def main() -> None:
     yaml_chunks = chunk_yaml_document(yaml_doc)
     print(f"    {yaml_doc['file_name']}: {len(yaml_chunks)} chunks")
 
-    print(f"\n  Total housing chunks    : {len(all_housing_chunks)}")
+    print(f"\n  Total governance chunks : {len(all_housing_chunks)}")
     print(f"  Total structured chunks : {len(yaml_chunks)}")
 
     # ── STEP 5: Embed into ChromaDB ──────────────────────────────────────
@@ -98,7 +105,7 @@ def main() -> None:
             policy_version=doc["document_version"],
             embedding_model_used=vs.embedding_model_name,
             collection_name=COLLECTION_HOUSING,
-        )
+        )  # Note: collection name kept for backward compat; contains AI governance docs
 
     audit.log_embedding(
         document_name=yaml_doc["file_name"],
@@ -122,7 +129,7 @@ def main() -> None:
 
     # ── STEP 8: Test retrieval ───────────────────────────────────────────
     print("▶ Step 8 — Test retrieval query ...")
-    test_query = "Am I eligible for housing benefit if I have £18,000 in savings?"
+    test_query = "What are the human oversight requirements for high-risk AI systems under the EU AI Act?"
     print(f"\n  Query: \"{test_query}\"\n")
 
     results = vs.query(test_query, COLLECTION_HOUSING, n_results=5)
@@ -179,7 +186,7 @@ def main() -> None:
     print("  ✅  PIPELINE COMPLETE")
     print("=" * 64)
     print(f"  Documents embedded     : {len(md_docs) + 1}")
-    print(f"  Housing chunks         : {n_housing}")
+    print(f"  Governance doc chunks  : {n_housing}")
     print(f"  Structured chunks      : {n_structured}")
     print(f"  Traceability validated : {'PASS' if report['passed'] else 'FAIL'}")
     print(f"  Audit log entries      : {len(audit.get_all_logs())}")

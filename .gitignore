@@ -11,10 +11,12 @@ ENV/
 .ipynb_checkpoints/
 
 # Vector store / embeddings
-vector_store/
+# NOTE: Un-ignored for HF Spaces deployment (pre-built DBs committed for faster cold start)
+# vector_store/
 
 # Audit logs
-/audit/
+# NOTE: Un-ignored for HF Spaces deployment
+# /audit/
 
 # OS
 .DS_Store

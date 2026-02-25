@@ -1,0 +1,266 @@
+{
+  "computed_at": "2026-02-24T08:31:48Z",
+  "total_log_entries": 15,
+  "computation_method": "deterministic_python",
+  "metrics": {
+    "ALCR": {
+      "metric": "ALCR",
+      "name": "Audit Log Completeness Ratio",
+      "value": 0.9333,
+      "value_percent": 93.33,
+      "total_entries": 15,
+      "complete_entries": 14,
+      "incomplete_entries": 1,
+      "missing_field_breakdown": {
+        "user_input": 1
+      },
+      "required_fields": [
+        "query_id",
+        "model_version",
+        "user_input",
+        "llm_output",
+        "timestamp",
+        "latency_ms",
+        "http_status",
+        "evaluation_status",
+        "policy_category"
+      ],
+      "interpretation": "93.33% of log entries have all required fields populated. 1 entries are missing data."
+    },
+    "ECR": {
+      "metric": "ECR",
+      "name": "Evaluation Coverage Rate",
+      "value": 0.5333,
+      "value_percent": 53.33,
+      "total_queries": 15,
+      "queries_with_ground_truth": 8,
+      "queries_evaluated": 8,
+      "queries_unevaluated": 7,
+      "ground_truth_coverage_percent": 53.33,
+      "interpretation": "53.33% of queries have been evaluated against ground truth. 8 of 15 queries have human-labeled reference answers."
+    },
+    "ELT": {
+      "metric": "ELT",
+      "name": "Evaluation Lag Time",
+      "avg_lag_seconds": 25232.18,
+      "avg_lag_hours": 7.01,
+      "median_lag_hours": 6.5,
+      "max_lag_hours": 11.3,
+      "total_queries": 15,
+      "measured_queries": 11,
+      "interpretation": "Average evaluation lag: 7.01 hours. Median: 6.5h, Max: 11.3h. Measured across 11 of 15 queries."
+    },
+    "LPSI": {
+      "metric": "LPSI",
+      "name": "Longitudinal Performance Stability Index",
+      "stability_score": 0.9214,
+      "avg_similarity": 0.9214,
+      "min_similarity": 0.7503,
+      "max_similarity": 0.9623,
+      "daily_averages": {
+        "2026-02-24": 0.9214
+      },
+      "valid_entries": 8,
+      "total_entries": 15,
+      "per_entry_detail": [
+        {
+          "query_id": "b0d87d3c-b841-40b8-88fc-b638a1a55f49",
+          "timestamp": "2026-02-24T08:30:16Z",
+          "similarity": 0.9501
+        },
+        {
+          "query_id": "565d7447-31f3-4e42-bf83-ed8d3a2955c9",
+          "timestamp": "2026-02-24T08:30:16Z",
+          "similarity": 0.9623
+        },
+        {
+          "query_id": "4865b560-755d-4f04-8f6b-a899c5a77627",
+          "timestamp": "2026-02-24T08:30:16Z",
+          "similarity": 0.9377
+        },
+        {
+          "query_id": "14e59d2d-0e8a-4504-a7bd-a124d1a6ee61",
+          "timestamp": "2026-02-24T08:30:16Z",
+          "similarity": 0.9515
+        },
+        {
+          "query_id": "8063d20c-6f25-45f3-9540-0b241864adeb",
+          "timestamp": "2026-02-24T08:30:16Z",
+          "similarity": 0.7503
+        },
+        {
+          "query_id": "3f854757-f86c-480a-b4c0-19159a3c4db9",
+          "timestamp": "2026-02-24T08:30:16Z",
+          "similarity": 0.9234
+        },
+        {
+          "query_id": "29127f8d-b15b-4f00-a1ca-e9eaf068ee72",
+          "timestamp": "2026-02-24T08:30:16Z",
+          "similarity": 0.9361
+        },
+        {
+          "query_id": "0ab22aea-3beb-4f91-8b79-d254d88da6d8",
+          "timestamp": "2026-02-24T08:30:16Z",
+          "similarity": 0.9595
+        }
+      ],
+      "interpretation": "Stability score: 0.9214 (1.0 = perfectly stable, 0.0 = highly variable). Average output-vs-ground-truth similarity: 0.9214 across 8 entries."
+    },
+    "RQRS": {
+      "metric": "RQRS",
+      "name": "Response-Query Relevance Score",
+      "avg_relevance": 0.6065,
+      "min_relevance": 0.448,
+      "max_relevance": 0.7547,
+      "median_relevance": 0.6198,
+      "total_pairs": 14,
+      "low_relevance_count": 3,
+      "low_relevance_entries": [
+        {
+          "query_id": "14e59d2d-0e8a-4504-a7bd-a124d1a6ee61",
+          "user_input_preview": "Can we use fully automated credit scoring without human review?",
+          "relevance_score": 0.448
+        },
+        {
+          "query_id": "8063d20c-6f25-45f3-9540-0b241864adeb",
+          "user_input_preview": "How do we demonstrate GDPR accountability for our ML pipeline?",
+          "relevance_score": 0.4652
+        },
+        {
+          "query_id": "0ad8563c-1ce2-4285-9738-a8581eca1adb",
+          "user_input_preview": "Explain the compliance requirements for our facial recognition system",
+          "relevance_score": 0.4604
+        }
+      ],
+      "per_entry_detail": [
+        {
+          "query_id": "b0d87d3c-b841-40b8-88fc-b638a1a55f49",
+          "user_input_preview": "What logging requirements apply to our biometric ID system under the EU AI Act?",
+          "relevance_score": 0.7465
+        },
+        {
+          "query_id": "565d7447-31f3-4e42-bf83-ed8d3a2955c9",
+          "user_input_preview": "Does our AI system need human oversight capabilities?",
+          "relevance_score": 0.7547
+        },
+        {
+          "query_id": "4865b560-755d-4f04-8f6b-a899c5a77627",
+          "user_input_preview": "What transparency requirements apply to our AI hiring tool?",
+          "relevance_score": 0.624
+        },
+        {
+          "query_id": "14e59d2d-0e8a-4504-a7bd-a124d1a6ee61",
+          "user_input_preview": "Can we use fully automated credit scoring without human review?",
+          "relevance_score": 0.448
+        },
+        {
+          "query_id": "c8bbf331-fc75-4496-be8e-1e751b4c16b2",
+          "user_input_preview": "What must we tell users about how our AI processes their data?",
+          "relevance_score": 0.5231
+        },
+        {
+          "query_id": "8063d20c-6f25-45f3-9540-0b241864adeb",
+          "user_input_preview": "How do we demonstrate GDPR accountability for our ML pipeline?",
+          "relevance_score": 0.4652
+        },
+        {
+          "query_id": "e9c38948-a426-40d0-895f-a24a79334d3b",
+          "user_input_preview": "What risk metrics should we track for our deployed AI models?",
+          "relevance_score": 0.5807
+        },
+        {
+          "query_id": "3f854757-f86c-480a-b4c0-19159a3c4db9",
+          "user_input_preview": "Do we need adversarial testing for our chatbot before deployment?",
+          "relevance_score": 0.6156
+        },
+        {
+          "query_id": "c54bf4e7-fdd9-4d49-b7ea-181a36491ed5",
+          "user_input_preview": "What governance structure does NIST recommend for AI?",
+          "relevance_score": 0.5461
+        },
+        {
+          "query_id": "29127f8d-b15b-4f00-a1ca-e9eaf068ee72",
+          "user_input_preview": "What documentation is mandatory under ISO 42001?",
+          "relevance_score": 0.6718
+        },
+        {
+          "query_id": "0ab22aea-3beb-4f91-8b79-d254d88da6d8",
+          "user_input_preview": "What must our AI policy include?",
+          "relevance_score": 0.7125
+        },
+        {
+          "query_id": "0ad8563c-1ce2-4285-9738-a8581eca1adb",
+          "user_input_preview": "Explain the compliance requirements for our facial recognition system",
+          "relevance_score": 0.4604
+        },
+        {
+          "query_id": "5cd0aaea-ea39-44e2-b6df-4357b74d997b",
+          "user_input_preview": "What are the penalties for non-compliance with the EU AI Act?",
+          "relevance_score": 0.707
+        },
+        {
+          "query_id": "4921c484-a69d-4953-95cf-b5d1876b9ed7",
+          "user_input_preview": "How should we handle a data breach involving our AI training data?",
+          "relevance_score": 0.6362
+        }
+      ],
+      "interpretation": "Average response-query relevance: 0.6065. 3 entries have relevance < 0.5 (potential hallucination/drift). Computed across 14 query-response pairs."
+    },
+    "ETR": {
+      "metric": "ETR",
+      "name": "Escalation Trigger Rate",
+      "value": 1.0,
+      "value_percent": 100.0,
+      "total_periods": 1,
+      "breaching_periods": 1,
+      "breach_details": [
+        {
+          "date": "2026-02-24",
+          "breaches": [
+            {
+              "threshold": "http_error_rate",
+              "limit": ">3.0%",
+              "actual": "13.33%"
+            },
+            {
+              "threshold": "eval_score_min",
+              "limit": "<0.7",
+              "actual": "1 entries below threshold"
+            },
+            {
+              "threshold": "latency_max_ms",
+              "limit": ">3000ms",
+              "actual": "1 entries above threshold"
+            }
+          ],
+          "total_queries": 15
+        }
+      ],
+      "thresholds_used": {
+        "similarity_min": 0.75,
+        "http_error_rate_max": 0.03,
+        "eval_score_min": 0.7,
+        "latency_max_ms": 3000
+      },
+      "interpretation": "100.0% of monitored periods (1/1) breached at least one threshold. Thresholds: error_rate > 3.0%, eval_score < 0.7, latency > 3000ms."
+    },
+    "RQCS": {
+      "metric": "RQCS",
+      "name": "Repeated Query Consistency Score",
+      "avg_consistency": null,
+      "clusters_found": 0,
+      "similarity_threshold": 0.85,
+      "total_queries": 14,
+      "interpretation": "No clusters of similar queries found at threshold 0.85. All 14 queries are sufficiently unique."
+    }
+  },
+  "dashboard_summary": {
+    "ALCR": 93.33,
+    "ECR": 53.33,
+    "ELT_hours": 7.01,
+    "LPSI": 0.9214,
+    "RQRS": 0.6065,
+    "ETR": 100.0,
+    "RQCS": null
+  }
+}

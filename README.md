@@ -1,3 +1,13 @@
+---
+title: GovernedRAG
+emoji: 🏛️
+colorFrom: blue
+colorTo: purple
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # GovernedRAG — AI Governance Compliance Audit Pipeline
 
 > **A deterministic, auditable compliance reasoning system** that uses a ReAct agent with structured retrieval tools to assess AI systems against EU AI Act, GDPR, NIST AI RMF, and ISO/IEC 42001 regulations.

@@ -1,0 +1,176 @@
+{
+  "audit_metadata": {
+    "audit_id": "AUDIT-20260223-210915",
+    "query": "Is our AI system compliant with EU AI Act Article 14 human oversight requirements?",
+    "model": "llama-3.3-70b-versatile",
+    "timestamp": "2026-02-23T21:09:15Z",
+    "pipeline_version": "1.1.0",
+    "steps_completed": 5
+  },
+  "step_1_decomposition": {
+    "regulations": [
+      "EU AI Act"
+    ],
+    "articles": [
+      "Article 14"
+    ],
+    "obligations": [
+      "human oversight"
+    ],
+    "system_context": "AI system",
+    "query_intent": "compliance_check"
+  },
+  "step_2_retrieved_clauses": [
+    {
+      "text": "# eu_ai_act_obligations\n\neu_ai_act_obligations:\n  human_oversight:\n    article: Article 14\n    compliance_timeline:\n      high_risk_obligations_apply: '2026-08-02'\n      regulation_in_force: '2024-08-01'\n    oversight_measures:\n    - capability: Understand AI system capabilities and limitations\n    - capability: Detect anomalies, dysfunctions, unexpected performance\n    - capability: Awareness of automation bias risk\n    - capability: Interpret AI system outputs correctly\n    - capability: Decid",
+      "source_file": "ai_governance_policy_structured.yaml",
+      "section": "eu_ai_act_obligations",
+      "document_category": "structured_policy",
+      "chunk_id": "ai_governance_policy_structured_003",
+      "distance": 0.513
+    },
+    {
+      "text": "# document_sources\n\ndocument_sources:\n- content_type: official_eu_regulation\n  document_name: EU Artificial Intelligence Act\n  id: eu_ai_act\n  last_accessed: '2026-02-24'\n  licence: © European Union, 1998–2024\n  section: Article 12 (Record-keeping), Article 13 (Transparency), Article 14 (Human\n    Oversight)\n  source: European Parliament and Council of the EU\n  url: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689\n- content_type: official_eu_regulation\n  document_name: Genera",
+      "source_file": "ai_governance_policy_structured.yaml",
+      "section": "document_sources",
+      "document_category": "structured_policy",
+      "chunk_id": "ai_governance_policy_structured_001",
+      "distance": 0.6429
+    },
+    {
+      "text": "# EU Artificial Intelligence Act — Key Governance Articles\n\n> **Source:** European Parliament and Council of the European Union\n> **URL:** https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689\n> **Last Accessed:** 2026-02-24\n> **Content Type:** Official EU Regulation (EU) 2024/1689\n> **Jurisdiction:** European Union\n> **Licence:** © European Union, 1998–2024\n\n---",
+      "source_file": "eu_ai_act.md",
+      "section": "Preamble",
+      "document_category": "eu_regulation",
+      "chunk_id": "eu_ai_act_001",
+      "distance": 0.6444
+    },
+    {
+      "text": "The EU Artificial Intelligence Act (Regulation (EU) 2024/1689) is the world's first comprehensive legal framework on artificial intelligence. It entered into force on 1 August 2024 and applies across all EU member states. This document covers the three core governance articles relevant to high-risk AI systems: Article 12 (Record-keeping), Article 13 (Transparency and provision of information to deployers), and Article 14 (Human oversight).\n\n---",
+      "source_file": "eu_ai_act.md",
+      "section": "Overview",
+      "document_category": "eu_regulation",
+      "chunk_id": "eu_ai_act_002",
+      "distance": 0.6525
+    },
+    {
+      "text": "Oversight measures shall be commensurate with the risks, level of autonomy and context of use of the high-risk AI system and shall be ensured through either one or both of the following types of measures built into the high-risk AI system by the provider or identified as appropriate by the deployer:\n\n**(a)** Measures that allow the individuals assigned to carry out human oversight to:\n\n- Fully understand the capacities and limitations of the high-risk AI system and be able to duly monitor its op",
+      "source_file": "eu_ai_act.md",
+      "section": "Article 14(3): Oversight Measures — Design Requirements",
+      "document_category": "eu_regulation",
+      "chunk_id": "eu_ai_act_012",
+      "distance": 0.6937
+    }
+  ],
+  "step_3_evidence_metrics": {
+    "total_queries": 15,
+    "latency_ms": {
+      "avg": 1307.67,
+      "min": 50,
+      "max": 5200,
+      "p95": 5200
+    },
+    "http_status_breakdown": {
+      "200": 13,
+      "500": 1,
+      "400": 1
+    },
+    "error_rate_percent": 13.33,
+    "evaluation": {
+      "status_breakdown": {
+        "passed": 12,
+        "failed": 1,
+        "error": 2
+      },
+      "avg_score": 0.8415,
+      "min_score": 0.62,
+      "max_score": 0.94
+    },
+    "review": {
+      "review_required_count": 5,
+      "review_required_rate_percent": 33.33,
+      "outcome_breakdown": {
+        "auto_approved": 9,
+        "approved_with_notes": 1,
+        "approved": 1,
+        "rejected": 1,
+        "pending": 2,
+        "auto_rejected": 1
+      },
+      "pending_count": 2
+    },
+    "policy_category_breakdown": {
+      "eu_ai_act": 5,
+      "gdpr": 4,
+      "nist_ai_rmf": 3,
+      "iso_42001": 2,
+      "general": 1
+    },
+    "model_versions": [
+      "llama3-8b-v1"
+    ],
+    "evidence_interpretation_guide": {
+      "review_required_meaning": "review_required=True means the system CORRECTLY flagged outputs for human review — a HIGH rate is a POSITIVE oversight signal, not a compliance failure.",
+      "auto_approved_meaning": "auto_approved means low-risk outputs passed automated evaluation (score >= threshold) and did NOT require human review — this is compliant behaviour.",
+      "pending_review_meaning": "2 reviews are currently PENDING human action — these represent an ACTUAL oversight gap requiring attention.",
+      "error_rate_meaning": "error_rate_percent measures system reliability (HTTP 4xx/5xx), NOT the presence or absence of human oversight mechanisms.",
+      "eval_score_meaning": "evaluation_score measures output quality (0.0–1.0). Scores below 0.70 should trigger mandatory human review."
+    },
+    "computation_method": "deterministic_python_sql",
+    "computed_at": "2026-02-23T21:09:13Z"
+  },
+  "step_4_gap_analysis": {
+    "gaps": [
+      {
+        "obligation": "human oversight",
+        "policy_requirement": "Oversight measures shall be commensurate with the risks, level of autonomy and context of use of the high-risk AI system",
+        "policy_source": "eu_ai_act.md, section: Article 14(3): Oversight Measures — Design Requirements",
+        "current_evidence": "review.pending_count: 2",
+        "status": "partial",
+        "gap_description": "There are 2 reviews currently pending human action, indicating an actual oversight gap requiring attention, but the system has correctly flagged 5 outputs for human review (review_required_rate_percent: 33.33%)"
+      }
+    ],
+    "overall_gap_count": 1,
+    "critical_gaps": 0
+  },
+  "step_5_adjudication": {
+    "audit_id": "AUDIT-20260223-210915",
+    "timestamp": "2026-02-23T21:09:15Z",
+    "query": "Is our AI system compliant with EU AI Act Article 14 human oversight requirements?",
+    "overall_status": "PARTIALLY_COMPLIANT",
+    "confidence_score": 0.85,
+    "summary": "The AI system is partially compliant with EU AI Act Article 14 human oversight requirements, as it has correctly flagged 5 outputs for human review, but there are 2 reviews currently pending human action, indicating an actual oversight gap requiring attention. The system's error rate of 13.33% and evaluation score of 0.8415 suggest room for improvement. Article 14 of the EU AI Act requires oversight measures commensurate with the risks, level of autonomy, and context of use of the high-risk AI system.",
+    "citations": [
+      {
+        "regulation": "EU AI Act",
+        "article": "Article 14",
+        "source_document": "eu_ai_act.md",
+        "relevance": "Requires human oversight measures for high-risk AI systems"
+      },
+      {
+        "regulation": "EU AI Act",
+        "article": "Article 12",
+        "source_document": "ai_governance_policy_structured.yaml",
+        "relevance": "Record-keeping requirements for high-risk AI systems"
+      },
+      {
+        "regulation": "EU AI Act",
+        "article": "Article 13",
+        "source_document": "ai_governance_policy_structured.yaml",
+        "relevance": "Transparency and provision of information to deployers for high-risk AI systems"
+      }
+    ],
+    "recommendations": [
+      "Address the pending reviews (review.pending_count: 2) to ensure timely human oversight and mitigate the identified gap",
+      "Improve the system's error rate (error_rate_percent: 13.33%) and evaluation score (avg_score: 0.8415) to enhance overall compliance with EU AI Act Article 14",
+      "Implement additional oversight measures to ensure commensurate oversight with the risks, level of autonomy, and context of use of the high-risk AI system, as required by Article 14 of the EU AI Act"
+    ],
+    "reasoning_trace": {
+      "step_1_completed": true,
+      "step_2_clauses_retrieved": 5,
+      "step_3_metrics_computed": true,
+      "step_4_gaps_identified": 1,
+      "step_5_adjudication": "complete"
+    }
+  }
+}

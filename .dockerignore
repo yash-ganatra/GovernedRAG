@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# Git
+.git/
+.gitignore
+
+# OS
+.DS_Store
+
+# Dev files
+*.log
+.env
+.ipynb_checkpoints/
+
+# Docs (not needed at runtime)
+AGENT_ARCHITECTURE.md
+RAIT_assessment.pdf
+RAIT_submission.md

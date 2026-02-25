@@ -25,11 +25,11 @@ from datetime import datetime, timezone
 from typing import Any, Optional
 
 
-DEFAULT_DB_PATH = os.path.join(
+_audit_dir = os.getenv("AUDIT_DIR") or os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
     "audit",
-    "inference_audit.db",
 )
+DEFAULT_DB_PATH = os.path.join(_audit_dir, "inference_audit.db")
 
 
 class InferenceLogger:

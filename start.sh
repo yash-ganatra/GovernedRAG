@@ -1,15 +1,35 @@
 #!/bin/bash
 # start.sh — GovernedRAG startup script for HuggingFace Spaces
-# Runs the ingestion pipeline on first boot (if vector_store is empty),
-# then starts the FastAPI server.
+# Copies pre-built data to writable /tmp, then starts FastAPI.
 
 set -e
 
 echo "=== GovernedRAG Startup ==="
 
-# Check if vector store has been populated
-if [ ! -f "/app/vector_store/chroma.sqlite3" ]; then
-    echo "▶ First boot detected — running ingestion pipeline..."
+# HF Spaces mounts repo files as read-only.
+# Copy writable data (SQLite DBs, ChromaDB, JSON) to /tmp.
+echo "▶ Copying data to writable storage..."
+
+if [ -d "/app/vector_store" ]; then
+    cp -r /app/vector_store /tmp/vector_store
+    echo "  ✅ Copied vector_store → /tmp/vector_store"
+fi
+
+if [ -d "/app/audit" ]; then
+    cp -r /app/audit /tmp/audit
+    echo "  ✅ Copied audit → /tmp/audit"
+else
+    mkdir -p /tmp/audit
+    echo "  ✅ Created /tmp/audit"
+fi
+
+# Set environment variables so Python modules use /tmp paths
+export VECTOR_STORE_DIR="/tmp/vector_store"
+export AUDIT_DIR="/tmp/audit"
+
+# If vector store wasn't pre-built, run ingestion
+if [ ! -f "/tmp/vector_store/chroma.sqlite3" ]; then
+    echo "▶ First boot — running ingestion pipeline..."
     python -m scripts.run_pipeline
     echo "✅ Ingestion complete."
 else

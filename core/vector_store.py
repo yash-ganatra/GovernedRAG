@@ -22,7 +22,7 @@ from typing import Any, Optional
 # Default to BAAI/bge-m3 to reuse cached model across projects.
 # Override via EMBEDDING_MODEL_NAME env var if needed.
 EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME", "BAAI/bge-m3")
-CHROMA_PERSIST_DIR = os.path.join(
+CHROMA_PERSIST_DIR = os.getenv("VECTOR_STORE_DIR") or os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
     "vector_store",
 )
@@ -31,8 +31,7 @@ COLLECTION_STRUCTURED = "structured_policy_docs"
 
 # ── Retrieval counter persistence file ───────────────────────────────────
 RETRIEVAL_COUNTS_PATH = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    "vector_store",
+    CHROMA_PERSIST_DIR,
     "retrieval_counts.json",
 )
 

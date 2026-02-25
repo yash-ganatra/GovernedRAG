@@ -19,11 +19,11 @@ from datetime import datetime, timezone
 from typing import Any, Optional
 
 
-DEFAULT_DB_PATH = os.path.join(
+_audit_dir = os.getenv("AUDIT_DIR") or os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
     "audit",
-    "embedding_audit.db",
 )
+DEFAULT_DB_PATH = os.path.join(_audit_dir, "embedding_audit.db")
 
 
 class AuditLogger:

@@ -15,6 +15,8 @@ Schema:
     review_required     BOOLEAN
     review_outcome      TEXT
     policy_category     TEXT
+    ground_truth        TEXT (partial — human-labeled reference answers)
+    evaluation_timestamp TEXT (ISO 8601 — when evaluation was performed)
 """
 
 import os
@@ -53,9 +55,20 @@ class InferenceLogger:
                     evaluation_score    REAL,
                     review_required     BOOLEAN,
                     review_outcome      TEXT,
-                    policy_category     TEXT
+                    policy_category     TEXT,
+                    ground_truth        TEXT,
+                    evaluation_timestamp TEXT
                 )
             """)
+            # Migrate: add columns if table already exists without them
+            try:
+                conn.execute("ALTER TABLE inference_log ADD COLUMN ground_truth TEXT")
+            except Exception:
+                pass
+            try:
+                conn.execute("ALTER TABLE inference_log ADD COLUMN evaluation_timestamp TEXT")
+            except Exception:
+                pass
 
     def _conn(self) -> sqlite3.Connection:
         return sqlite3.connect(self.db_path)
@@ -73,6 +86,8 @@ class InferenceLogger:
         review_required: bool = False,
         review_outcome: str = "pending",
         policy_category: str = "general",
+        ground_truth: Optional[str] = None,
+        evaluation_timestamp: Optional[str] = None,
     ) -> None:
         """
         Log an inference event.
@@ -84,8 +99,9 @@ class InferenceLogger:
                 INSERT INTO inference_log
                     (query_id, model_version, user_input, llm_output, timestamp,
                      latency_ms, http_status, evaluation_status, evaluation_score,
-                     review_required, review_outcome, policy_category)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     review_required, review_outcome, policy_category,
+                     ground_truth, evaluation_timestamp)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     query_id,
@@ -100,6 +116,8 @@ class InferenceLogger:
                     review_required,
                     review_outcome,
                     policy_category,
+                    ground_truth,
+                    evaluation_timestamp,
                 ),
             )
         print(f"[InferenceLog] Logged query {query_id}")

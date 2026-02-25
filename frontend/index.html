@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GovernedRAG — Compliance Dashboard</title>
+    <meta name="description" content="AI Governance Compliance Dashboard with metrics visualization and chatbot">
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+    <!-- ───── Header ───── -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <h1>GovernedRAG</h1>
+            </div>
+            <span class="subtitle">AI Governance Compliance Dashboard</span>
+        </div>
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="dashboard" id="tab-dashboard">
+                <span class="tab-icon">📊</span> Dashboard
+            </button>
+            <button class="nav-tab" data-tab="logs" id="tab-logs">
+                <span class="tab-icon">📋</span> Inference Logs
+            </button>
+            <button class="nav-tab" data-tab="chatbot" id="tab-chatbot">
+                <span class="tab-icon">🤖</span> Chatbot
+            </button>
+            <button class="nav-tab" data-tab="reports" id="tab-reports">
+                <span class="tab-icon">📄</span> Reports
+            </button>
+        </nav>
+    </header>
+
+    <!-- ───── Dashboard Tab ───── -->
+    <main id="view-dashboard" class="view active">
+        <div class="dashboard-controls">
+            <h2 class="section-title">Governance Metrics</h2>
+            <div class="controls-right">
+                <button class="btn btn-primary" id="btn-refresh-metrics" onclick="loadMetrics()">
+                    <span>↻</span> Refresh Metrics
+                </button>
+                <button class="btn btn-secondary" id="btn-fast-metrics" onclick="loadMetrics(true)">
+                    ⚡ Fast Mode
+                </button>
+            </div>
+        </div>
+
+        <!-- KPI Cards — Layer 1: User Query Monitoring -->
+        <div class="kpi-grid" id="kpi-grid">
+            <div class="kpi-card" id="kpi-reci">
+                <div class="kpi-label">RECI</div>
+                <div class="kpi-value" id="val-reci">—</div>
+                <div class="kpi-desc">Risk Exposure Concentration</div>
+                <div class="kpi-bar">
+                    <div class="kpi-bar-fill" id="bar-reci"></div>
+                </div>
+            </div>
+            <div class="kpi-card" id="kpi-uqrr">
+                <div class="kpi-label">UQRR</div>
+                <div class="kpi-value" id="val-uqrr">—</div>
+                <div class="kpi-desc">Unresolved Query Recurrence</div>
+                <div class="kpi-bar">
+                    <div class="kpi-bar-fill" id="bar-uqrr"></div>
+                </div>
+            </div>
+            <!-- Layer 2: LLM Behaviour Monitoring -->
+            <div class="kpi-card" id="kpi-bdi">
+                <div class="kpi-label">BDI</div>
+                <div class="kpi-value" id="val-bdi">—</div>
+                <div class="kpi-desc">Behavioural Drift Index</div>
+                <div class="kpi-bar">
+                    <div class="kpi-bar-fill" id="bar-bdi"></div>
+                </div>
+            </div>
+            <div class="kpi-card" id="kpi-ocr">
+                <div class="kpi-label">OCR</div>
+                <div class="kpi-value" id="val-ocr">—</div>
+                <div class="kpi-desc">Overcommitment Ratio</div>
+                <div class="kpi-bar">
+                    <div class="kpi-bar-fill" id="bar-ocr"></div>
+                </div>
+            </div>
+            <!-- Layer 3: Model Version & Inference Monitoring -->
+            <div class="kpi-card" id="kpi-vid">
+                <div class="kpi-label">VID</div>
+                <div class="kpi-value" id="val-vid">—</div>
+                <div class="kpi-desc">Version Impact Deviation</div>
+                <div class="kpi-bar">
+                    <div class="kpi-bar-fill" id="bar-vid"></div>
+                </div>
+            </div>
+            <!-- Layer 4: Human Evaluation Monitoring -->
+            <div class="kpi-card" id="kpi-mdr">
+                <div class="kpi-label">MDR</div>
+                <div class="kpi-value" id="val-mdr">—</div>
+                <div class="kpi-desc">Monitoring Depth Ratio</div>
+                <div class="kpi-bar">
+                    <div class="kpi-bar-fill" id="bar-mdr"></div>
+                </div>
+            </div>
+            <!-- Layer 5: Operational Reliability Monitoring -->
+            <div class="kpi-card" id="kpi-ovi">
+                <div class="kpi-label">OVI</div>
+                <div class="kpi-value" id="val-ovi">—</div>
+                <div class="kpi-desc">Operational Volatility Index</div>
+                <div class="kpi-bar">
+                    <div class="kpi-bar-fill" id="bar-ovi"></div>
+                </div>
+            </div>
+            <div class="kpi-card" id="kpi-etbr">
+                <div class="kpi-label">ETBR</div>
+                <div class="kpi-value" id="val-etbr">—</div>
+                <div class="kpi-desc">Escalation Breach Rate</div>
+                <div class="kpi-bar">
+                    <div class="kpi-bar-fill" id="bar-etbr"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>Metrics Overview</h3>
+                <canvas id="chart-radar"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Metric Breakdown</h3>
+                <canvas id="chart-bar"></canvas>
+            </div>
+        </div>
+
+        <!-- Interpretations -->
+        <div class="interpretations-card" id="interpretations-card">
+            <h3>📝 Metric Interpretations</h3>
+            <div id="interpretations-list" class="interpretations-list"></div>
+        </div>
+    </main>
+
+    <!-- ───── Logs Tab ───── -->
+    <main id="view-logs" class="view">
+        <div class="dashboard-controls">
+            <h2 class="section-title">Inference Logs</h2>
+            <button class="btn btn-primary" id="btn-refresh-logs" onclick="loadLogs()">
+                <span>↻</span> Refresh
+            </button>
+        </div>
+        <div class="logs-summary" id="logs-summary"></div>
+        <div class="table-container">
+            <table class="logs-table" id="logs-table">
+                <thead>
+                    <tr>
+                        <th>Query ID</th>
+                        <th>User Input</th>
+                        <th>Category</th>
+                        <th>Latency</th>
+                        <th>Status</th>
+                        <th>Eval Score</th>
+                        <th>Review</th>
+                        <th>Ground Truth</th>
+                    </tr>
+                </thead>
+                <tbody id="logs-tbody"></tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- ───── Chatbot Tab ───── -->
+    <main id="view-chatbot" class="view">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h2>🤖 Compliance Chatbot</h2>
+                <p>Query the policy vector database or run a full compliance audit</p>
+                <div class="chat-mode-toggle">
+                    <button class="mode-btn active" data-mode="search" id="mode-search" onclick="setChatMode('search')">
+                        🔍 Policy Search
+                    </button>
+                    <button class="mode-btn" data-mode="audit" id="mode-audit" onclick="setChatMode('audit')">
+                        🛡️ Full Audit
+                    </button>
+                </div>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot-message">
+                    <div class="message-content">
+                        <p>Welcome! I can help you search regulatory policies or run a full compliance audit.</p>
+                        <p><b>Policy Search mode:</b> I'll search the vector database for relevant regulatory text.</p>
+                        <p><b>Full Audit mode:</b> I'll run the ReAct agent through all 5 compliance steps.</p>
+                        <p>Try asking: <i>"EU AI Act Article 14 human oversight"</i></p>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Ask about AI governance regulations..."
+                    onkeydown="if(event.key==='Enter')sendMessage()">
+                <button class="btn btn-primary" id="btn-send" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- ───── Reports Tab ───── -->
+    <main id="view-reports" class="view">
+        <div class="dashboard-controls">
+            <h2 class="section-title">Compliance Report Generator</h2>
+            <div class="controls-right">
+                <button class="btn btn-secondary" id="btn-report-fast" onclick="generateReport(true)">
+                    ⚡ Quick Report
+                </button>
+                <button class="btn btn-primary" id="btn-report-full" onclick="generateReport(false)">
+                    📄 Full Report
+                </button>
+            </div>
+        </div>
+        <p class="report-hint">Full Report includes embedding-based metrics (UQRR, BDI, VID). Quick Report uses only
+            deterministic metrics (RECI, OCR, MDR, OVI, ETBR).</p>
+        <div id="report-container" class="report-container"></div>
+    </main>
+
+    <script src="/static/app.js"></script>
+</body>
+
+</html>

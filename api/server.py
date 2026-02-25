@@ -27,7 +27,7 @@ import time
 from datetime import datetime, timezone
 from typing import Optional
 
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
 
 from fastapi import FastAPI, HTTPException
@@ -87,7 +87,7 @@ def _get_embedder():
 @app.get("/api/metrics")
 def get_metrics():
     """Compute all 8 governance metrics (includes embedding-based metrics UQRR, BDI, VID)."""
-    from governance_metrics import compute_all_metrics
+    from metrics.governance_metrics import compute_all_metrics
     try:
         results = compute_all_metrics(include_embeddings=True)
         return results
@@ -98,7 +98,7 @@ def get_metrics():
 @app.get("/api/metrics/fast")
 def get_metrics_fast():
     """Compute non-embedding metrics only (RECI, OCR, MDR, OVI, ETBR)."""
-    from governance_metrics import compute_all_metrics
+    from metrics.governance_metrics import compute_all_metrics
     try:
         results = compute_all_metrics(include_embeddings=False)
         return results
@@ -109,7 +109,7 @@ def get_metrics_fast():
 @app.get("/api/logs")
 def get_logs():
     """Return all inference log entries."""
-    from embedding_pipeline.inference_logger import InferenceLogger
+    from core.inference_logger import InferenceLogger
     try:
         logger = InferenceLogger()
         logs = logger.get_all_logs()
@@ -125,8 +125,8 @@ def get_logs():
 @app.post("/api/query")
 def policy_search(req: QueryRequest):
     """Search the vector DB for relevant policy clauses."""
-    from retrieval_tools import _policy_search
-    from embedding_pipeline.inference_logger import InferenceLogger
+    from agents.retrieval_tools import _policy_search
+    from core.inference_logger import InferenceLogger
     start = time.time()
     try:
         result_str = _policy_search(req.query)
@@ -175,8 +175,8 @@ def policy_search(req: QueryRequest):
 @app.post("/api/chat")
 def chat(req: ChatRequest):
     """Chat with the compliance agent (ReAct loop)."""
-    from compliance_agent import run_agent_audit
-    from embedding_pipeline.inference_logger import InferenceLogger
+    from agents.compliance_agent import run_agent_audit
+    from core.inference_logger import InferenceLogger
     start = time.time()
     try:
         report = run_agent_audit(
@@ -232,8 +232,8 @@ def chat(req: ChatRequest):
 @app.get("/api/report")
 def generate_report(fast: bool = False):
     """Generate a structured compliance report combining metrics + logs."""
-    from governance_metrics import compute_all_metrics
-    from embedding_pipeline.inference_logger import InferenceLogger
+    from metrics.governance_metrics import compute_all_metrics
+    from core.inference_logger import InferenceLogger
 
     try:
         metrics = compute_all_metrics(include_embeddings=not fast)
@@ -393,4 +393,4 @@ if os.path.isdir(frontend_dir):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("api:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("api.server:app", host="0.0.0.0", port=8000, reload=True)

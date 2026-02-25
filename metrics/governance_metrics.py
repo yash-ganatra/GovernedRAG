@@ -27,10 +27,10 @@ from datetime import datetime, timezone
 from typing import Any, Optional
 from collections import defaultdict
 
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
 
-from embedding_pipeline.inference_logger import InferenceLogger
+from core.inference_logger import InferenceLogger
 
 
 # ── Risk keywords for RECI classification ────────────────────────────

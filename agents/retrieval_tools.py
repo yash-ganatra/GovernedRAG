@@ -20,18 +20,18 @@ import statistics
 from datetime import datetime, timezone
 from typing import Any, Optional
 
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
 
 from langchain.tools import Tool
 from pydantic import BaseModel, Field
 
-from embedding_pipeline.vector_store import (
+from core.vector_store import (
     VectorStoreManager,
     COLLECTION_HOUSING,
     COLLECTION_STRUCTURED,
 )
-from embedding_pipeline.inference_logger import InferenceLogger
+from core.inference_logger import InferenceLogger
 
 
 # ═══════════════════════════════════════════════════════════════════════════

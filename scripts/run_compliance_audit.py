@@ -19,10 +19,10 @@ os.environ.setdefault("MKL_NUM_THREADS", "1")
 import sys
 import json
 
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
 
-from compliance_pipeline import run_compliance_audit
+from agents.compliance_pipeline import run_compliance_audit
 
 
 def main():

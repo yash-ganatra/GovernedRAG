@@ -25,21 +25,21 @@ import sys
 import json
 
 # Resolve project root
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
 
-from embedding_pipeline.document_loader import load_markdown_documents, load_yaml_policy
-from embedding_pipeline.chunker import chunk_document, chunk_yaml_document
-from embedding_pipeline.vector_store import (
+from core.document_loader import load_markdown_documents, load_yaml_policy
+from core.chunker import chunk_document, chunk_yaml_document
+from core.vector_store import (
     VectorStoreManager,
     COLLECTION_HOUSING,
     COLLECTION_STRUCTURED,
 )
-from embedding_pipeline.traceability import (
+from core.traceability import (
     validate_traceability,
     print_validation_report,
 )
-from embedding_pipeline.audit_logger import AuditLogger
+from core.audit_logger import AuditLogger
 
 
 # ── Paths ────────────────────────────────────────────────────────────────

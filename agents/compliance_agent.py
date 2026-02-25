@@ -32,7 +32,7 @@ import json
 from datetime import datetime, timezone
 from typing import Any, Optional
 
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, PROJECT_ROOT)
 
 from langchain.agents import AgentExecutor, create_react_agent
@@ -40,7 +40,7 @@ from langchain.prompts import PromptTemplate
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 
-from retrieval_tools import ALL_TOOLS
+from agents.retrieval_tools import ALL_TOOLS
 
 # Load environment variables from .env file
 load_dotenv()
